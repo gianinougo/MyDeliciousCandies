@@ -8,5 +8,8 @@
     <string name="url">Url</string>
     <string name="add">ADD</string>
     <string name="buscar">buscar</string>
+    <string name="manufacturer">manufacturer</string>
+    <string name="favorite">favorite</string>
+    <string name="submit">submit</string>
 
 </resources>

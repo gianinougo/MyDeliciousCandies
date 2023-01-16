@@ -10,6 +10,16 @@ import com.ugogianino.mydeliciouscandies.model.Candie
 class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
+
+        private var instance: MyDeliciousCandiesDBAdapter? = null
+
+        fun getInstance(context: Context): MyDeliciousCandiesDBAdapter {
+            if (instance == null) {
+                instance = MyDeliciousCandiesDBAdapter(context)
+            }
+            return instance!!
+        }
+
         private const val DATABASE_NAME = "candies.db"
         private const val DATABASE_VERSION = 1
 
@@ -67,10 +77,10 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
     }
 
     @SuppressLint("Range")
-    fun getAllCandies(): List<Candie> {
-        val candList = arrayListOf<Candie>()
-        val cursor = readableDatabase.query(TABLE_CANDIES, null, null, null, null, null, null)
-        if (cursor.moveToNext()) {
+    fun getAllCandies(): MutableList<Candie> {
+        val candList = mutableListOf<Candie>()
+        val cursor = readableDatabase.query(TABLE_CANDIES, null, null, null, null, null, "$COLUMN_ID DESC")
+        while (cursor.moveToNext()) {
             val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
             val name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
             val manufacturer = cursor.getString(cursor.getColumnIndex(COLUMN_MANUFACTURER))

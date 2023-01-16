@@ -20,6 +20,7 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
     private var candie: List<Candie> = emptyList()
 
 
+
     @SuppressLint("CutPasteId")
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         lateinit var labelName: TextView
@@ -54,6 +55,7 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
        return listCandie.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var candies = listCandie[position]
         holder.labelName.text = candies.name
@@ -68,22 +70,20 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
         holder.itemView.setOnLongClickListener {
             deletedItem = candies
             dbAdapter.deleteCandie(candies.id)
-            //scores = dbAdapter.getScores()
-            candie = dbAdapter.getAllCandies()
-            notifyDataSetChanged()
+            listCandie.removeAt(position)
+            notifyItemRemoved(position)
             Snackbar.make(holder.itemView, "Item deleted", Snackbar.LENGTH_LONG)
                 .setAction("Undo") {
                     if (deletedItem != null) {
                         dbAdapter.addCandie(deletedItem!!)
-                        candie =dbAdapter.getAllCandies()
-                        notifyDataSetChanged()
+                        listCandie.add(position, deletedItem!!)
+                        notifyItemRangeChanged(position, 1)
+                        //notifyItemInserted(position)
+                        //notifyDataSetChanged()
                     }
                 }.show()
             true
         }
 
-
     }
-
-
 }

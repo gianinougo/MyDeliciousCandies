@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ugogianino.mydeliciouscandies.adapters.CandieAdapter
+import com.ugogianino.mydeliciouscandies.adapters.MyDeliciousCandiesDBAdapter
 import com.ugogianino.mydeliciouscandies.databinding.ActivityMainBinding
 import com.ugogianino.mydeliciouscandies.model.Candie
 
@@ -20,16 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-        listaCandie.add(Candie(1,"Caca", "casa", "gominola", "caja", 5, null, "www.tuprima.com",true))
-
+        listaCandie = MyDeliciousCandiesDBAdapter.getInstance(this).getAllCandies() as MutableList<Candie>
         estableceradapatador()
 
         binding.addButton.setOnClickListener {
@@ -38,10 +30,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun estableceradapatador(){
         recycler = binding.listaCandies
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = CandieAdapter(this, listaCandie)
+        recycler.adapter?.notifyDataSetChanged()
     }
+
+    override fun onResume() {
+        super.onResume()
+        listaCandie = MyDeliciousCandiesDBAdapter.getInstance(this).getAllCandies() as MutableList<Candie>
+        estableceradapatador()
+    }
+
 }
