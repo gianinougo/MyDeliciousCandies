@@ -7,7 +7,7 @@ data class Candie(
     var candyType: String = "",
     var saleFormat: String = "",
     var sweetness: Int,
-    var image: ByteArray? = null,
+    var image: ByteArray,
     var url: String = "",
     var isFavourite: Boolean = false
 )

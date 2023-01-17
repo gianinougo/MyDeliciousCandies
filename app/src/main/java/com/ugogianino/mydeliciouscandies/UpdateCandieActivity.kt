@@ -1,14 +1,17 @@
 package com.ugogianino.mydeliciouscandies
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import com.ugogianino.mydeliciouscandies.adapters.CandieAdapter
 import com.ugogianino.mydeliciouscandies.adapters.MyDeliciousCandiesDBAdapter
-import com.ugogianino.mydeliciouscandies.databinding.ActivityAddCandieBinding
 import com.ugogianino.mydeliciouscandies.databinding.ActivityUpdateCandieBinding
 import com.ugogianino.mydeliciouscandies.model.Candie
+import java.io.ByteArrayOutputStream
 
 class UpdateCandieActivity : AppCompatActivity() {
 
@@ -37,7 +40,7 @@ class UpdateCandieActivity : AppCompatActivity() {
 
         val image = intent.getByteArrayExtra("image")
         if (image != null) {
-            //binding.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.size))
+            binding.imageView3.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.size))
         }
 
         val url = intent.getStringExtra("url")
@@ -55,6 +58,11 @@ class UpdateCandieActivity : AppCompatActivity() {
             val sweetness = binding.sweetnessEditText.text.toString()
             val url = binding.urlEditText.text.toString()
             val isFavourite = binding.favoriteCheckbox.isChecked
+            val imageView = binding.imageView3
+            val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val image = byteArrayOutputStream.toByteArray()
 
             if (validateInputs(name, manufacturer, candyType, format, sweetness, url)) {
                 val candie = Candie(
@@ -64,7 +72,7 @@ class UpdateCandieActivity : AppCompatActivity() {
                     candyType = candyType,
                     saleFormat = format,
                     sweetness = sweetness.toInt(),
-                    image = null,
+                    image = image,
                     url = url,
                     isFavourite = isFavourite
                 )
