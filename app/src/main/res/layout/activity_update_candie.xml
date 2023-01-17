@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".AddCandieActivity">
+    tools:context=".UpdateCandieActivity">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/foto"
         app:layout_constraintBottom_toTopOf="@+id/name_edit_text"
         app:layout_constraintStart_toStartOf="@+id/name_edit_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
+        tools:ignore="ImageContrastCheck"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
@@ -30,7 +32,8 @@
         app:layout_constraintBottom_toTopOf="@+id/manufacturer_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/manufacturer_edit_text"
@@ -45,7 +48,8 @@
         app:layout_constraintBottom_toTopOf="@+id/type_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/name_edit_text"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/type_edit_text"
@@ -60,7 +64,8 @@
         app:layout_constraintBottom_toTopOf="@+id/format_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manufacturer_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/manufacturer_edit_text"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/format_edit_text"
@@ -72,7 +77,8 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/type_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/type_edit_text"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/sweetness_edit_text"
@@ -84,7 +90,8 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/format_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/format_edit_text"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/url_edit_text"
@@ -97,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sweetness_edit_text"
-        tools:ignore="TextFields" />
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
 
     <CheckBox
         android:id="@+id/favorite_checkbox"
@@ -108,13 +115,14 @@
         app:layout_constraintTop_toBottomOf="@+id/url_edit_text" />
 
     <Button
-        android:id="@+id/submit_button"
+        android:id="@+id/update_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
+        android:text="@string/update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favorite_checkbox" />
+
 
     <Button
         android:id="@+id/add_photo"
@@ -128,3 +136,4 @@
         app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

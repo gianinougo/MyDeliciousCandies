@@ -11,5 +11,8 @@
     <string name="manufacturer">manufacturer</string>
     <string name="favorite">favorite</string>
     <string name="submit">submit</string>
+    <string name="update">update</string>
+    <string name="add_photo">add photo</string>
+    <string name="foto">Foto</string>
 
 </resources>

@@ -12,7 +12,12 @@
         android:theme="@style/Theme.MyDeliciousCandies"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateCandieActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".AddCandieActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

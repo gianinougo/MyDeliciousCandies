@@ -2,15 +2,20 @@ package com.ugogianino.mydeliciouscandies.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.ugogianino.mydeliciouscandies.AddCandieActivity
 import com.ugogianino.mydeliciouscandies.R
+import com.ugogianino.mydeliciouscandies.UpdateCandieActivity
 import com.ugogianino.mydeliciouscandies.model.Candie
 
 
@@ -18,6 +23,8 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
     private val dbAdapter = MyDeliciousCandiesDBAdapter(context)
     private var deletedItem: Candie? = null
     private var candie: List<Candie> = emptyList()
+    private var mLastClickTime: Long = -1
+
 
 
 
@@ -85,5 +92,29 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
             true
         }
 
+        holder.itemView.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                val intent = Intent(holder.itemView.context, UpdateCandieActivity::class.java)
+                intent.putExtra("id", candies.id)
+                intent.putExtra("name", candies.name)
+                intent.putExtra("manufacturer", candies.manufacturer)
+                intent.putExtra("candyType", candies.candyType)
+                intent.putExtra("format", candies.saleFormat)
+                intent.putExtra("sweetness", candies.sweetness)
+                intent.putExtra("image", candies.image)
+                intent.putExtra("url", candies.url)
+                intent.putExtra("isFavourite", candies.isFavourite)
+                holder.itemView.context.startActivity(intent)
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+        }
     }
+
+    fun updateItem(position: Int, updatedItem: Candie) {
+        listCandie[position] = updatedItem
+        notifyItemChanged(position)
+    }
+
+
+
 }
