@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.ugogianino.mydeliciouscandies.model.Candie
 
-class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class MyDeliciousCandiesDBAdapter(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
 
@@ -35,7 +36,6 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
         private const val COLUMN_URL = "url"
         private const val COLUMN_FAVORITE = "favorite"
     }
-
 
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -90,7 +90,8 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
     @SuppressLint("Range")
     fun getAllCandies(): MutableList<Candie> {
         val candList = mutableListOf<Candie>()
-        val cursor = readableDatabase.query(TABLE_CANDIES, null, null, null, null, null, "$COLUMN_ID DESC")
+        val cursor =
+            readableDatabase.query(TABLE_CANDIES, null, null, null, null, null, "$COLUMN_ID DESC")
         while (cursor.moveToNext()) {
             val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID))
             val name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
@@ -101,7 +102,7 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
             val sweetness = cursor.getInt(cursor.getColumnIndex(COLUMN_SWEETNESS))
             val url = cursor.getString(cursor.getColumnIndex(COLUMN_URL))
             val favorite = cursor.getInt(cursor.getColumnIndex(COLUMN_FAVORITE)) == 1
-            val cand = Candie(id, name, manufacturer, type, format, sweetness ,image, url, favorite)
+            val cand = Candie(id, name, manufacturer, type, format, sweetness, image, url, favorite)
             candList.add(cand)
         }
         cursor.close()
@@ -151,7 +152,6 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
     }
 
 
-
-    }
+}
 
 

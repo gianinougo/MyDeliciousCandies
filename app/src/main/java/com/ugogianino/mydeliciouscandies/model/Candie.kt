@@ -11,7 +11,7 @@ data class Candie(
     var url: String = "",
     var isFavourite: Boolean = false,
 
-) {
+    ) {
 
 }
 

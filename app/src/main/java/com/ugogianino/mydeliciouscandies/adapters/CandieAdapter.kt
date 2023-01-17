@@ -17,17 +17,16 @@ import com.ugogianino.mydeliciouscandies.UpdateCandieActivity
 import com.ugogianino.mydeliciouscandies.model.Candie
 
 
-class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):RecyclerView.Adapter<CandieAdapter.ViewHolder>() {
+class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>) :
+    RecyclerView.Adapter<CandieAdapter.ViewHolder>() {
     private val dbAdapter = MyDeliciousCandiesDBAdapter(context)
     private var deletedItem: Candie? = null
     private var candie: List<Candie> = emptyList()
     private var mLastClickTime: Long = -1
 
 
-
-
     @SuppressLint("CutPasteId")
-    inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var labelName: TextView
         lateinit var labelType: TextView
         lateinit var labelFormat: TextView
@@ -57,8 +56,9 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
     }
 
     override fun getItemCount(): Int {
-       return listCandie.size
+        return listCandie.size
     }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val candies = listCandie[position]
@@ -70,7 +70,13 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
         holder.labelCandyType.text = candies.candyType
         holder.labelSweetness.text = candies.sweetness.toString()
         holder.labelUrl.text = candies.url
-        holder.image.setImageBitmap(candies.image?.let { BitmapFactory.decodeByteArray(candies.image, 0, it.size) })
+        holder.image.setImageBitmap(candies.image?.let {
+            BitmapFactory.decodeByteArray(
+                candies.image,
+                0,
+                it.size
+            )
+        })
 
         holder.itemView.setOnLongClickListener {
             deletedItem = candies
@@ -112,7 +118,6 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
         listCandie[position] = updatedItem
         notifyItemChanged(position)
     }
-
 
 
 }
