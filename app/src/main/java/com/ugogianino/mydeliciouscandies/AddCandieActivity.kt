@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ugogianino.mydeliciouscandies.adapters.MyDeliciousCandiesDBAdapter
 import com.ugogianino.mydeliciouscandies.databinding.ActivityAddCandieBinding
 import com.ugogianino.mydeliciouscandies.model.Candie
+import com.ugogianino.mydeliciouscandies.utils.Utilidades
 import java.io.ByteArrayOutputStream
 
 
@@ -24,6 +25,8 @@ class AddCandieActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private val CAMERA_REQUEST_CODE = 0
     private val GALLERY_REQUEST_CODE = 1
+
+    private lateinit var utilidades: Utilidades
 
 
 
@@ -43,30 +46,36 @@ class AddCandieActivity : AppCompatActivity() {
             val url = binding.urlEditText.text.toString()
             val isFavourite = binding.favoriteCheckbox.isChecked
             val imageView = binding.imageView3
-            val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val image = byteArrayOutputStream.toByteArray()
 
 
+            val drawable = imageView.drawable
+            if (drawable is BitmapDrawable) {
+                val bitmap = drawable.bitmap
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val image = byteArrayOutputStream.toByteArray()
 
-            if (validateInputs(name, manufacturer, candyType, format, sweetness, url)) {
-                val candie = Candie(
-                    0,
-                    name = name,
-                    manufacturer = manufacturer,
-                    candyType = candyType,
-                    saleFormat = format,
-                    sweetness = sweetness.toInt(),
-                    image = image,
-                    url = url,
-                    isFavourite = isFavourite
-                )
-                MyDeliciousCandiesDBAdapter.getInstance(this).addCandie(candie)
-                finish()
+                if (validateInputs(name, manufacturer, candyType, format, sweetness, url)) {
+                    val candie = Candie(
+                        0,
+                        name = name,
+                        manufacturer = manufacturer,
+                        candyType = candyType,
+                        saleFormat = format,
+                        sweetness = sweetness.toInt(),
+                        image = image,
+                        url = url,
+                        isFavourite = isFavourite
+                    )
+                    MyDeliciousCandiesDBAdapter.getInstance(this).addCandie(candie)
+                    finish()
+                }
+            } else {
+                Toast.makeText(this, "The image is required", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-
         }
+
 
         binding.addPhoto.setOnClickListener {
             val options = arrayOf<CharSequence>("Take Photo", "Choose from Gallery", "Cancel")
@@ -117,6 +126,7 @@ class AddCandieActivity : AppCompatActivity() {
             Toast.makeText(this, "Invalid url", Toast.LENGTH_SHORT).show()
             return false
         }
+
 
         return true
 

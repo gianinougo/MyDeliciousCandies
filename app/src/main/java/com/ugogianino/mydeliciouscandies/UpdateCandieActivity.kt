@@ -1,12 +1,15 @@
 package com.ugogianino.mydeliciouscandies
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.ugogianino.mydeliciouscandies.adapters.CandieAdapter
 import com.ugogianino.mydeliciouscandies.adapters.MyDeliciousCandiesDBAdapter
 import com.ugogianino.mydeliciouscandies.databinding.ActivityUpdateCandieBinding
@@ -17,6 +20,8 @@ class UpdateCandieActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUpdateCandieBinding
     private lateinit var candieAdapter: CandieAdapter
+    private val CAMERA_REQUEST_CODE = 0
+    private val GALLERY_REQUEST_CODE = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdateCandieBinding.inflate(layoutInflater)
@@ -82,6 +87,31 @@ class UpdateCandieActivity : AppCompatActivity() {
 
         }
 
+        binding.updatePhoto.setOnClickListener {
+            val options = arrayOf<CharSequence>("Take Photo", "Choose from Gallery", "Cancel")
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("Add Photo!")
+            builder.setItems(options) { dialog, item ->
+                when {
+                    options[item] == "Take Photo" -> takePhotoFromCamera()
+                    options[item] == "Choose from Gallery" -> choosePhotoFromGallery()
+                    options[item] == "Cancel" -> dialog.dismiss()
+                }
+            }
+            builder.show()
+        }
+
+    }
+
+    private fun takePhotoFromCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, CAMERA_REQUEST_CODE)
+    }
+
+
+    private fun choosePhotoFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
     private fun validateInputs(name: String, manufacturer: String, candyType: String, format: String, sweetness: String, url: String): Boolean {
@@ -105,5 +135,7 @@ class UpdateCandieActivity : AppCompatActivity() {
         return true
 
     }
+
+
 
 }

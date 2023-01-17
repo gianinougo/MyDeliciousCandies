@@ -10,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.ugogianino.mydeliciouscandies.AddCandieActivity
 import com.ugogianino.mydeliciouscandies.R
 import com.ugogianino.mydeliciouscandies.UpdateCandieActivity
 import com.ugogianino.mydeliciouscandies.model.Candie
@@ -61,10 +59,10 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
     override fun getItemCount(): Int {
        return listCandie.size
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var candies = listCandie[position]
+        val candies = listCandie[position]
+
         holder.labelName.text = candies.name
         holder.labelType.text = candies.candyType
         holder.labelFormat.text = candies.saleFormat
@@ -84,8 +82,8 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>):R
                     if (deletedItem != null) {
                         dbAdapter.addCandie(deletedItem!!)
                         listCandie.add(position, deletedItem!!)
-                        notifyItemRangeChanged(position, 1)
-                        //notifyItemInserted(position)
+                        //notifyItemRangeChanged(position, 1)
+                        notifyItemInserted(position)
                         //notifyDataSetChanged()
                     }
                 }.show()

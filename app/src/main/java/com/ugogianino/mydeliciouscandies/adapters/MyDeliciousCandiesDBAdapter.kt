@@ -3,6 +3,7 @@ package com.ugogianino.mydeliciouscandies.adapters
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.ugogianino.mydeliciouscandies.model.Candie
@@ -47,6 +48,10 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
     }
 
     fun addCandie(candie: Candie) {
+        if (searchCandie(candie.name) != null) {
+            // Mostrar un mensaje de error o similar indicando que el elemento ya existe
+            return
+        }
         val cv = ContentValues()
         cv.put(COLUMN_NAME, candie.name)
         cv.put(COLUMN_MANUFACTURER, candie.manufacturer)
@@ -60,6 +65,11 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
     }
 
     fun updateCandie(candie: Candie) {
+        val existingCandie = searchCandie(candie.name)
+        if (existingCandie != null && existingCandie.id != candie.id) {
+            // Mostrar un mensaje de error o similar indicando que el elemento ya existe
+            return
+        }
         val cv = ContentValues()
         cv.put(COLUMN_NAME, candie.name)
         cv.put(COLUMN_MANUFACTURER, candie.manufacturer)
@@ -71,6 +81,7 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
         cv.put(COLUMN_FAVORITE, if (candie.isFavourite) 1 else 0)
         writableDatabase.update(TABLE_CANDIES, cv, "$COLUMN_ID = ?", arrayOf(candie.id.toString()))
     }
+
 
     fun deleteCandie(candie: Int) {
         writableDatabase.delete(TABLE_CANDIES, "$COLUMN_ID = ?", arrayOf(candie.toString()))
@@ -97,9 +108,50 @@ class MyDeliciousCandiesDBAdapter(context: Context) : SQLiteOpenHelper(context, 
         return candList
     }
 
+    fun searchCandie(name: String): Candie? {
+        val cursor = readableDatabase.query(
+            TABLE_CANDIES,
+            arrayOf(
+                COLUMN_ID,
+                COLUMN_NAME,
+                COLUMN_MANUFACTURER,
+                COLUMN_TYPE,
+                COLUMN_FORMAT,
+                COLUMN_SWEETNESS,
+                COLUMN_IMAGE,
+                COLUMN_URL,
+                COLUMN_FAVORITE
+            ),
+            "$COLUMN_NAME = ?",
+            arrayOf(name),
+            null,
+            null,
+            null
+        )
+        cursor.moveToFirst()
+        if (cursor.count == 0) {
+            return null
+        }
+        return candieFromCursor(cursor)
+    }
+
+    @SuppressLint("Range")
+    private fun candieFromCursor(cursor: Cursor): Candie {
+        return Candie(
+            cursor.getInt(cursor.getColumnIndex(COLUMN_ID)),
+            cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
+            cursor.getString(cursor.getColumnIndex(COLUMN_MANUFACTURER)),
+            cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)),
+            cursor.getString(cursor.getColumnIndex(COLUMN_FORMAT)),
+            cursor.getInt(cursor.getColumnIndex(COLUMN_SWEETNESS)),
+            cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE)),
+            cursor.getString(cursor.getColumnIndex(COLUMN_URL)),
+            cursor.getInt(cursor.getColumnIndex(COLUMN_FAVORITE)) == 1
+        )
+    }
 
 
 
-}
+    }
 
 

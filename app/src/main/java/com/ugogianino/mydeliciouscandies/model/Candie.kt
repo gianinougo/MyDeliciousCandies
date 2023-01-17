@@ -9,6 +9,9 @@ data class Candie(
     var sweetness: Int,
     var image: ByteArray,
     var url: String = "",
-    var isFavourite: Boolean = false
-)
+    var isFavourite: Boolean = false,
+
+) {
+
+}
 
