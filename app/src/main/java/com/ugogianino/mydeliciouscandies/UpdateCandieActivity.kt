@@ -69,17 +69,18 @@ class UpdateCandieActivity : AppCompatActivity() {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val image = byteArrayOutputStream.toByteArray()
 
+
             if (validateInputs(name, manufacturer, candyType, format, sweetness, url)) {
                 val candie = Candie(
                     id = id,
                     name = name,
-                    manufacturer = manufacturer,
-                    candyType = candyType,
-                    saleFormat = format,
+                    manufacturerId = manufacturer.toInt(),
+                    candyTypeId = candyType.toInt(),
+                    formatId = format.toInt(),
                     sweetness = sweetness.toInt(),
                     image = image,
                     url = url,
-                    isFavourite = isFavourite
+                    isFavourite = isFavourite,
                 )
                 MyDeliciousCandiesDBAdapter.getInstance(this).updateCandie(candie)
                 finish()

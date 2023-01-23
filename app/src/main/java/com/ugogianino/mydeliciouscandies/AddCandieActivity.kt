@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ugogianino.mydeliciouscandies.adapters.MyDeliciousCandiesDBAdapter
 import com.ugogianino.mydeliciouscandies.databinding.ActivityAddCandieBinding
 import com.ugogianino.mydeliciouscandies.model.Candie
+import com.ugogianino.mydeliciouscandies.model.CandyType
+import com.ugogianino.mydeliciouscandies.model.Format
+import com.ugogianino.mydeliciouscandies.model.Manufacturer
 import com.ugogianino.mydeliciouscandies.utils.Utilidades
 import java.io.ByteArrayOutputStream
 
@@ -25,6 +28,7 @@ class AddCandieActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private val CAMERA_REQUEST_CODE = 0
     private val GALLERY_REQUEST_CODE = 1
+
 
     private lateinit var utilidades: Utilidades
 
@@ -37,9 +41,14 @@ class AddCandieActivity : AppCompatActivity() {
 
         binding.submitButton.setOnClickListener {
             val name = binding.nameEditText.text.toString()
-            val manufacturer = binding.manufacturerEditText.text.toString()
-            val candyType = binding.typeEditText.text.toString()
-            val format = binding.formatEditText.text.toString()
+            val manufacturerId = MyDeliciousCandiesDBAdapter.getInstance(this).getManufacturerId(binding.manufacturerEditText.text.toString())
+            if (manufacturerId == -1) {
+                //mostrar un mensaje de error al usuario indicando que el fabricante no fue encontrado
+                Toast.makeText(this, "Manufacturer not found", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val candyTypeId = MyDeliciousCandiesDBAdapter.getInstance(this).getCandyTypeId(binding.typeEditText.text.toString())
+            val formatId = MyDeliciousCandiesDBAdapter.getInstance(this).getFormatId(binding.formatEditText.text.toString())
             val sweetness = binding.sweetnessEditText.text.toString()
             val url = binding.urlEditText.text.toString()
             val isFavourite = binding.favoriteCheckbox.isChecked
@@ -53,13 +62,13 @@ class AddCandieActivity : AppCompatActivity() {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
                 val image = byteArrayOutputStream.toByteArray()
 
-                if (validateInputs(name, manufacturer, candyType, format, sweetness, url)) {
+                if (validateInputs(name, manufacturerId, candyTypeId, formatId, sweetness, url)) {
                     val candie = Candie(
                         0,
                         name = name,
-                        manufacturer = manufacturer,
-                        candyType = candyType,
-                        saleFormat = format,
+                        manufacturerId = manufacturerId,
+                        candyTypeId = candyTypeId,
+                        formatId = formatId,
                         sweetness = sweetness.toInt(),
                         image = image,
                         url = url,
@@ -107,15 +116,15 @@ class AddCandieActivity : AppCompatActivity() {
 
     private fun validateInputs(
         name: String,
-        manufacturer: String,
-        candyType: String,
-        format: String,
+        manufacturer: Int,
+        candyType: Int,
+        format: Int,
         sweetness: String,
         url: String
     ): Boolean {
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(manufacturer) || TextUtils.isEmpty(
-                candyType
-            ) || TextUtils.isEmpty(format) || TextUtils.isEmpty(sweetness) || TextUtils.isEmpty(url)
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(manufacturer.toString()) || TextUtils.isEmpty(
+                candyType.toString()
+            ) || TextUtils.isEmpty(format.toString()) || TextUtils.isEmpty(sweetness) || TextUtils.isEmpty(url)
         ) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             return false

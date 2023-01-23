@@ -64,10 +64,10 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>) :
         val candies = listCandie[position]
 
         holder.labelName.text = candies.name
-        holder.labelType.text = candies.candyType
-        holder.labelFormat.text = candies.saleFormat
-        holder.labelManufacturer.text = candies.manufacturer
-        holder.labelCandyType.text = candies.candyType
+        holder.labelType.text = candies.candyType.name
+        holder.labelFormat.text = candies.format.name
+        holder.labelManufacturer.text = candies.manufacturer.name
+        holder.labelCandyType.text = candies.candyType.name
         holder.labelSweetness.text = candies.sweetness.toString()
         holder.labelUrl.text = candies.url
         holder.image.setImageBitmap(candies.image?.let {
@@ -101,9 +101,9 @@ class CandieAdapter(var context: Context, var listCandie: MutableList<Candie>) :
                 val intent = Intent(holder.itemView.context, UpdateCandieActivity::class.java)
                 intent.putExtra("id", candies.id)
                 intent.putExtra("name", candies.name)
-                intent.putExtra("manufacturer", candies.manufacturer)
-                intent.putExtra("candyType", candies.candyType)
-                intent.putExtra("format", candies.saleFormat)
+                intent.putExtra("manufacturer", candies.manufacturer.name)
+                intent.putExtra("candyType", candies.candyType.name)
+                intent.putExtra("format", candies.format.name)
                 intent.putExtra("sweetness", candies.sweetness)
                 intent.putExtra("image", candies.image)
                 intent.putExtra("url", candies.url)
